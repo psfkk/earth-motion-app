@@ -1,0 +1,1908 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>지구의 자전과 공전 입체 가상 탐험선</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Style Sheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .font-display {
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+      }
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      /* Animation classes */
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes pulse-subtle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.8; }
+      }
+      .animate-pulse-subtle {
+        animation: pulse-subtle 4s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-slate-50 flex flex-col justify-between">
+
+    <!-- Upper Navigation & Branding Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-lg font-black shadow-md">
+            🌍
+          </div>
+          <div>
+            <h1 class="text-lg font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+              지구의 자전과 공전 입체 가상 탐험선
+            </h1>
+            <p class="text-xs text-slate-500 font-bold">초등학교 6학년 과학 • 스스로 관찰하고 극복하는 오개념 코칭 클래스</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="handleGlobalReset()"
+            class="text-xs bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 font-bold px-3 py-1.5 rounded-lg border border-slate-200 hover:border-rose-200 transition-colors cursor-pointer"
+          >
+            🔄 탐구 처음부터 다시하기
+          </button>
+          <span class="text-[10px] text-slate-400 font-bold bg-slate-100 px-2.5 py-1.5 rounded flex items-center gap-1">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400 animate-pulse"></i> 자전축 기준 23.5°
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+      <!-- Kid-friendly massive tab switches -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="main-navigation-tabs">
+        <button
+          type="button"
+          id="tab-btn-intro"
+          onclick="switchTab('intro')"
+          class="flex items-center justify-center gap-4 py-4 px-6 rounded-2xl font-black text-base cursor-pointer transition-all duration-200 active:scale-95 bg-indigo-600 text-white shadow-md"
+        >
+          <i data-lucide="book-open" class="w-5 h-5 shrink-0"></i>
+          <div class="text-left leading-tight">
+            <div class="text-[10px] opacity-75 font-bold">START STEP 1</div>
+            <span>도입: 구름 vs 천체 관찰</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          id="tab-btn-chat"
+          onclick="switchTab('chat')"
+          class="flex items-center justify-center gap-4 py-4 px-6 rounded-2xl font-black text-base cursor-pointer transition-all duration-200 active:scale-95 bg-white text-slate-700 border border-slate-200 shadow-sm hover:bg-slate-50"
+        >
+          <i data-lucide="message-square" class="w-5 h-5 shrink-0"></i>
+          <div class="text-left leading-tight">
+            <div class="text-[10px] opacity-75 font-bold">COACHING STEP 2</div>
+            <span>코스모 AI챗봇과 성장대화 하기</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          id="tab-btn-simulator"
+          onclick="switchTab('simulator')"
+          class="flex items-center justify-center gap-4 py-4 px-6 rounded-2xl font-black text-base cursor-pointer transition-all duration-200 active:scale-95 bg-white text-slate-700 border border-slate-200 shadow-sm hover:bg-slate-50"
+        >
+          <i data-lucide="compass" class="w-5 h-5 shrink-0"></i>
+          <div class="text-left leading-tight">
+            <div class="text-[10px] opacity-75 font-bold">EXPERIMENT STEP 3</div>
+            <span>우주 탐사 시뮬레이터</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- TAB 1: INTRO (CLOUDS VS CELESTIAL OBSERVATION) -->
+      <section id="tab-content-intro" class="space-y-8 animate-fade-in block">
+        <!-- Introduction Banner -->
+        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 text-center max-w-3xl mx-auto shadow-sm">
+          <h2 class="text-2xl font-bold text-slate-800 tracking-tight mb-2 flex items-center justify-center gap-2">
+            🌿 우주 탐사의 첫걸음: 하늘 관찰 가이드
+          </h2>
+          <p class="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto">
+            매일 가만히 서서 넓은 하늘을 올려다본 적이 있나요? 구름도 흘러가고 태양이랑 별들도 움직여요!
+            하지만 둘의 움직임 속에 지구가 숨겨놓은 <strong class="text-indigo-600">아주 결정적인 우주의 원인 차이</strong>가 있답니다.
+            아래 두 화면의 고유한 규칙을 집중해 비교하여 관찰해 보세요!
+          </p>
+        </div>
+
+        <!-- Comparison Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <!-- Day Sky (Clouds & Sun) -->
+          <div class="border border-slate-200 rounded-2xl p-4 bg-gradient-to-b from-sky-300 via-sky-200 to-amber-50 overflow-hidden relative shadow-sm h-72 flex flex-col justify-between">
+            <div class="z-10 bg-white/90 backdrop-blur-sm py-1 px-3 rounded-full text-xs font-semibold text-sky-900 self-start shadow-sm">
+              ☀️ 낮 하늘의 천체
+            </div>
+
+            <!-- Daytime Sky Container -->
+            <div class="absolute inset-0 z-0 pointer-events-none" id="day-star-field">
+              <div id="dynamic-sun" class="absolute transition-transform duration-100 z-10" style="left: 0%; top: 50%;">
+                <div class="flex flex-col items-center">
+                  <i data-lucide="sun" class="w-12 h-12 text-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.9)]"></i>
+                  <span class="text-[8px] bg-amber-950/85 text-amber-200 font-extrabold px-1.5 py-0.5 rounded shadow-sm mt-0.5 whitespace-nowrap">
+                    태양
+                  </span>
+                </div>
+              </div>
+
+              <!-- Animated Clouds -->
+              <div id="intro-clouds-container"></div>
+
+              <div class="absolute left-2 bottom-6 bg-sky-950/20 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-sky-900 font-bold border border-sky-300/30">동쪽</div>
+              <div class="absolute right-2 bottom-6 bg-sky-950/20 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-sky-900 font-bold border border-sky-300/30">서쪽</div>
+            </div>
+
+            <div class="z-10 flex justify-between items-end">
+              <span class="text-[10px] bg-sky-950/80 border border-sky-800/20 text-white py-0.5 px-2 rounded font-medium">
+                구름과 태양의 움직임을 비교해보세요
+              </span>
+            </div>
+          </div>
+
+          <!-- Night Sky (Stars & Moon) -->
+          <div class="border border-slate-200 rounded-2xl p-4 bg-slate-950 overflow-hidden relative shadow-sm h-72 flex flex-col justify-between text-white">
+            <div class="z-10 bg-indigo-900/80 border border-indigo-500/20 backdrop-blur-sm py-1 px-3 rounded-full text-xs font-semibold text-indigo-200 self-start shadow-sm">
+              🌙 밤하늘의 천체
+            </div>
+
+            <!-- Nighttime Sky Container -->
+            <div class="absolute inset-0 z-0 overflow-hidden" id="night-star-field">
+              <!-- Dynamic moving stars wrapper -->
+              <div id="intro-stars-container" class="absolute inset-0 pointer-events-none"></div>
+
+              <div id="dynamic-moon" class="absolute transition-transform duration-100 z-10" style="left: 0%; top: 50%;">
+                <div class="flex flex-col items-center">
+                  <i data-lucide="moon" class="w-9 h-9 text-yellow-100 drop-shadow-[0_0_12px_rgba(254,240,138,0.85)]"></i>
+                  <span class="text-[8px] bg-slate-900/90 text-yellow-200 font-extrabold px-1.5 py-0.5 rounded shadow-sm mt-1 whitespace-nowrap">
+                    달
+                  </span>
+                </div>
+              </div>
+
+              <!-- Star constellations tracks -->
+              <div class="absolute left-2 bottom-6 bg-slate-900/70 border border-slate-700/50 px-2 py-0.5 rounded text-[10px] text-slate-300 font-bold">동쪽</div>
+              <div class="absolute right-2 bottom-6 bg-slate-900/70 border border-slate-700/50 px-2 py-0.5 rounded text-[10px] text-slate-300 font-bold">서쪽</div>
+            </div>
+
+            <div class="z-10 flex justify-between items-end">
+              <span class="text-[10px] bg-indigo-950/85 border border-indigo-900/40 text-indigo-200 py-0.5 px-2 rounded font-medium">
+                수 많은 별과 달의 움직임을 비교해보세요
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concept Discussion Notebook Box -->
+        <div class="max-w-3xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-500">
+              <i data-lucide="lightbulb" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-black text-slate-800">✍️ 1단계 마이 우주 탐험 공책</h3>
+              <p class="text-xs text-slate-500">지평선 너머 정답이 흘러가는 규칙을 발견한 생각이나 궁금증을 먼저 소중히 적어보세요.</p>
+            </div>
+          </div>
+
+          <form id="intro-concept-form" onsubmit="handleIntroAnalysis(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">하늘 천체가 매일 동일하게 동쪽에서 떠서 서쪽으로 가는 규칙에 대해 내 언어로 설명하기:</label>
+              <textarea
+                id="initial-explanation"
+                rows="3"
+                class="w-full text-sm p-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-300 transition-all font-medium leading-relaxed"
+                placeholder="예: 태양이 스스로 하루에 한 바퀴씩 지구를 도는 것 같아요! / 우리가 사는 지구가 직접 스스로 돌고 있기 때문일 것 같아요!"
+                required
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end gap-3">
+              <button
+                type="submit"
+                id="intro-submit-btn"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold px-6 py-3 rounded-xl shadow-md cursor-pointer transition-all active:scale-95 text-sm flex items-center justify-center gap-2"
+              >
+                <span>천문학자 코스모 박사의 피드백 수신하기</span>
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </form>
+
+          <!-- Feedback Analysis Response Card -->
+          <div id="intro-feedback-card" class="bg-indigo-950/5 text-slate-900 p-5 rounded-2xl border border-indigo-500/10 space-y-4 relative overflow-hidden hidden">
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider uppercase shadow-xs">코스모 박사의 현미경 분석</span>
+              <span id="misconception-badge" class="bg-amber-400 text-amber-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs">오개념 감지</span>
+            </div>
+            <h4 id="misconception-label" class="text-base font-black text-slate-800 mt-1"></h4>
+            <div class="space-y-3 leading-relaxed text-sm text-slate-700">
+              <p id="misconception-ponder" class="bg-white/80 border border-indigo-100 p-3.5 rounded-xl font-medium shadow-2xs"></p>
+              
+              <div class="flex gap-3 start items-start bg-amber-50/50 border border-amber-200/50 p-3.5 rounded-xl">
+                <div class="shrink-0 w-6 h-6 rounded-full bg-amber-400 text-amber-950 flex items-center justify-center font-bold text-xs">?</div>
+                <div>
+                  <span class="text-xs text-amber-800 font-extrabold block">우리 생각을 깨우는 관점 전환 돋보기:</span>
+                  <p id="misconception-question" class="text-xs text-slate-700 mt-0.5 font-bold"></p>
+                </div>
+              </div>
+
+              <div class="flex gap-3 start items-start bg-emerald-50/50 border border-emerald-200/50 p-3.5 rounded-xl">
+                <i data-lucide="compass" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+                <div>
+                  <span class="text-xs text-emerald-800 font-extrabold block">추천 실험실 미션:</span>
+                  <p id="misconception-experiment" class="text-xs text-slate-700 mt-0.5 font-medium"></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button
+                onclick="switchTab('simulator')"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-sm transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
+              >
+                <span>가상 우주 3D 실험실에서 확인해 보기</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: COSMO CHAT & BEFORE-AFTER COMPARISON -->
+      <section id="tab-content-chat" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-fade-in hidden">
+        <!-- LEFT PANEL: Cosmo Chatbot interface (Col span 7) -->
+        <div class="lg:col-span-7 bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm flex flex-col h-[640px]">
+          <!-- Chatroom Header -->
+          <div class="bg-slate-900 text-white p-4 flex items-center justify-between border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-sm">🔭</div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-extrabold text-sm">천문학자 코스모 박사</span>
+                  <span class="bg-emerald-500 w-2 h-2 rounded-full animate-ping"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messages List area -->
+          <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50">
+            <!-- Dynamically populated messages here -->
+          </div>
+
+          <!-- Fast Question Shortcuts -->
+          <div class="px-4 py-2 bg-slate-100 border-t border-slate-200 overflow-x-auto whitespace-nowrap flex gap-1.5 scrollbar-none">
+            <button onclick="sendShortcut('태양이 가만히 있고 지구가 스스로 도나요?')" class="text-[10px] bg-white hover:bg-indigo-50 text-indigo-950 font-bold px-3 py-1.5 rounded-lg border border-slate-200/80 cursor-pointer text-xs shrink-0">태양이 고정인가요?</button>
+            <button onclick="sendShortcut('지구의 자전이 완전히 멈추면 밤하늘 벌자리는 어떻게 보이나요?')" class="text-[10px] bg-white hover:bg-indigo-50 text-indigo-950 font-bold px-3 py-1.5 rounded-lg border border-slate-200/80 cursor-pointer text-xs shrink-0">자전이 멈추면?</button>
+            <button onclick="sendShortcut('지구가 자전축이 23.5도 기울어지면 왜 계절의 온도가 달라져요?')" class="text-[10px] bg-white hover:bg-indigo-50 text-indigo-950 font-bold px-3 py-1.5 rounded-lg border border-slate-200/80 cursor-pointer text-xs shrink-0">자전축 23.5도 차이?</button>
+          </div>
+
+          <!-- Chat input form -->
+          <form onsubmit="handleSendChatMessage(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+            <input
+              type="text"
+              id="chat-input-field"
+              class="flex-1 text-sm px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-300 font-medium"
+              placeholder="무엇이든 자유롭게 물어보세요! 코스모 박사는 정답을 유도해 준단다..."
+              required
+            />
+            <button
+              type="submit"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl shadow-md cursor-pointer aspect-square flex items-center justify-center transition-all active:scale-95"
+            >
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- RIGHT PANEL: Before-After comparison & Reflection (Col span 5) -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                <i data-lucide="award" class="w-4 h-4"></i>
+              </div>
+              <h3 class="text-sm font-black text-slate-800">🚀 우주 대원의 의식 성장 전후 교환</h3>
+            </div>
+
+            <form onsubmit="handleCompareReview(event)" class="space-y-3">
+              <!-- Before display -->
+              <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs leading-relaxed text-amber-950">
+                <span class="font-bold text-amber-900 block">원래 내가 생각했던 현상:</span>
+                <p id="first-explanation-preview" class="italic mt-0.5">도입 공책을 먼저 적어주세요.</p>
+              </div>
+
+              <!-- Revised input -->
+              <div>
+                <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">탐구 후 수정한 과학적 설명:</label>
+                <textarea
+                  id="revised-explanation-input"
+                  rows="3"
+                  class="w-full text-xs p-3 rounded-xl border border-slate-205 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-300 font-medium leading-relaxed"
+                  placeholder="예: 태양은 멈추어 있고 지구가 스스로 '서쪽에서 동쪽'으로 자전을 하기 때문에 시각적으로만 낮과 밤의 기차가 가는 것처럼 보였습니다!"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="flex justify-end">
+                <button
+                  type="submit"
+                  id="compare-submit-btn"
+                  class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold px-4  py-2.5 rounded-lg shadow-sm cursor-pointer transition-all active:scale-95"
+                >
+                  코스모에게 격려 받기
+                </button>
+              </div>
+            </form>
+
+            <!-- Growth Progression Chart Display -->
+            <div id="comparison-result-card" class="bg-indigo-950/5 border border-indigo-500/10 p-4 rounded-xl space-y-3 hidden">
+              <div>
+                <span class="text-[9px] bg-indigo-600 text-white font-bold px-2 py-0.5 rounded shadow-sm">나의 성장 백분율</span>
+                <p id="comparison-progress" class="text-xs text-slate-700 leading-relaxed font-semibold mt-1"></p>
+              </div>
+              <div class="bg-white border border-indigo-100 p-3 rounded-lg text-xs">
+                <span class="text-[9px] text-amber-600 font-extrabold block">코스모 박사의 사랑의 코멘트:</span>
+                <p id="comparison-comment" class="text-xs text-slate-800 font-medium italic mt-0.5 mt-1"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reflection Box -->
+          <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+                <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+              </div>
+              <h3 class="text-sm font-black text-slate-800">🎒 3단계: 오늘의 탐험 성찰록</h3>
+            </div>
+
+            <form onsubmit="handleReflectionDownload(event)" class="space-y-3" id="reflection-form">
+              <div>
+                <label class="block text-[10px] text-slate-400 font-bold mb-1">Q1. 지구의 자전, 공전 원리 중 오늘 새롭게 배운 점은 무엇인가요?</label>
+                <input type="text" id="reflect-q1" class="w-full text-xs p-2.5 rounded-lg border border-slate-200 font-medium" placeholder="예: 자전과 밤의 별자리가 규칙을 가진 까닭" required />
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 font-bold mb-1">Q2. 원래 내가 가졌던 오해가 어떻게 풀렸고 바뀌었나요?</label>
+                <input type="text" id="reflect-q2" class="w-full text-xs p-2.5 rounded-lg border border-slate-200 font-medium" placeholder="예: 여름이 더운 이유가 거리가 아니었구나" required />
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 font-bold mb-1">Q3. 아직 더 수수께끼처럼 궁금한 호기심 영역은 무엇인가요?</label>
+                <input type="text" id="reflect-q3" class="w-full text-xs p-2.5 rounded-lg border border-slate-200 font-medium" placeholder="예: 지구 반대편 남반구의 별자리는 어떤 구도일지" required />
+              </div>
+              <div id="reflection-success-msg" class="bg-emerald-50 text-emerald-800 p-2 text-center text-[10px] rounded-lg border border-emerald-200 font-extrabold hidden">
+                ✓ 탐험 성찰록이 이미지 파일(.jpg)로 성공적으로 생성 및 다운로드되었습니다!
+              </div>
+              <div class="flex justify-end">
+                <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-lg shadow-sm transition-all active:scale-95 cursor-pointer">
+                  성찰 일지 다운받기
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: SIMULATOR (THE CORE FEATURE) -->
+      <section id="tab-content-simulator" class="space-y-6 animate-fade-in hidden">
+        <!-- Dashboard Header -->
+        <div class="bg-indigo-900 text-white rounded-3xl p-6 border border-indigo-950 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-500/30 text-indigo-200 text-xs font-bold px-3 py-1 rounded-full border border-indigo-400/20">초등 과학 6학년 1학기</span>
+              <span class="text-amber-300 font-bold text-xs flex items-center gap-1">🔭 변인 통제 탐구 단원</span>
+            </div>
+            <h2 class="text-2xl font-black mt-2 tracking-tight">우주 탐사 시뮬레이터</h2>
+            <p class="text-indigo-200 text-xs mt-1 leading-relaxed max-w-xl">
+              태양이 왜 무조건 동쪽에서 서쪽으로 일주할까요? 계절마다 밤하늘 남쪽에 뜨는 우리의 별자리가 바뀌는 까닭은 무엇일까요?
+              자전축 기울기를 눕혀보고 회전을 정지시켜 보며 인과관계를 스스로 조작해 보아요!
+            </p>
+          </div>
+
+          <button
+            onclick="resetSimulatorToDefault()"
+            class="bg-amber-400 hover:bg-amber-500 text-indigo-950 font-black px-4 py-3 rounded-xl shadow-md shrink-0 flex items-center justify-center gap-2 duration-150 active:scale-95 text-xs border-b-4 border-amber-600 font-bold"
+          >
+            <i data-lucide="refresh-ccw" class="w-4 h-4 text-indigo-950"></i>
+            변인 기준으로 되돌리기 (탐구 원위치)
+          </button>
+        </div>
+
+        <!-- Master Split Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          
+          <!-- Outer Space Orbit Vista (Left) -->
+          <div class="bg-slate-950 border border-slate-900 rounded-3xl p-4 flex flex-col justify-between text-white shadow-md relative min-h-[460px] overflow-hidden">
+            <div class="z-10 flex items-center justify-between">
+              <div class="flex items-center gap-2 text-indigo-300 text-xs font-black bg-indigo-950/80 border border-indigo-700/30 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <span class="animate-ping w-2 h-2 rounded-full bg-emerald-400"></span>
+                우주 공간 관찰
+              </div>
+              <span class="text-[10px] text-slate-400 font-bold bg-black/50 px-2 py-1 rounded">⚠️ 크기, 거리는 축약되었습니다</span>
+            </div>
+
+            <!-- SVG Render of Space Orbit -->
+            <div class="absolute inset-0 z-0 flex items-center justify-center">
+              <svg id="orbital-svg" class="w-full h-full min-h-[300px]" viewBox="0 0 400 300" fill="none">
+                <!-- Stars Background static -->
+                <circle cx="50" cy="40" r="1" fill="#fff" opacity="0.6"/>
+                <circle cx="340" cy="70" r="1.5" fill="#fff" opacity="0.9"/>
+                <circle cx="80" cy="220" r="1.2" fill="#fff" opacity="0.4"/>
+                <circle cx="300" cy="250" r="1" fill="#fff" opacity="0.7"/>
+                <circle cx="200" cy="20" r="2" fill="#fff" opacity="0.8"/>
+
+                <!-- Glow effects defs -->
+                <defs>
+                  <radialGradient id="sun-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#FBBF24" stopOpacity="1"/>
+                    <stop offset="40%" stopColor="#F59E0B" stopOpacity="0.4"/>
+                    <stop offset="100%" stopColor="#F59E0B" stopOpacity="0"/>
+                  </radialGradient>
+                </defs>
+
+                <!-- Glowing Central Sun with prominent solar flares and coronas -->
+                <circle cx="200" cy="150" r="54" fill="url(#sun-glow)" opacity="0.85" />
+                <!-- Dynamic outer bright corona layer -->
+                <circle cx="200" cy="150" r="32" fill="none" stroke="#EF4444" stroke-width="4" opacity="0.3" />
+                <!-- Vibrant Orange Sunbody -->
+                <circle cx="200" cy="150" r="28" fill="#F97316" />
+                <!-- Golden Inner Core -->
+                <circle cx="200" cy="150" r="22" fill="#FBBF24" />
+                <!-- 8-directional radiant dynamic sunburst flares (two-toned orange and yellow for high quality shine) -->
+                <path d="M 200,110 L 200,92 M 200,190 L 200,208 M 143,150 L 125,150 M 257,150 L 275,150 M 165,115 L 151,101 M 235,115 L 249,101 M 165,185 L 151,199 M 235,185 L 249,199" stroke="#EF4444" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M 200,111 L 200,94 M 200,189 L 200,206 M 145,150 L 127,150 M 255,150 L 273,150 M 165,115 L 152,102 M 235,115 L 248,102 M 165,185 L 152,198 M 235,185 L 248,198" stroke="#FBBF24" stroke-width="1.8" stroke-linecap="round"/>
+                <text x="192" y="151.5" fill="#78350F" fontSize="10.5" fontWeight="900" textAnchor="middle" dominant-baseline="middle" style="text-shadow: 0px 0px 4px rgba(255,255,255,0.7)">태양</text>
+
+                <!-- Elliptical Orbital Trail -->
+                <ellipse cx="200" cy="150" rx="95" ry="47.5" stroke="#4F46E5" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4" />
+
+                <!-- Earth direction arrows (Moved below the orbit path center-bottom to prevent narrow UI cutoff) -->
+                <path d="M 160,222 Q 200,232 240,222" stroke="#818CF8" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.85" />
+                <polygon points="238,218 246,222 238,226" fill="#818CF8" />
+                <text x="200" y="244" fill="#818CF8" fontSize="8.5" fontWeight="bold" textAnchor="middle">공전 방향 ➔</text>
+
+                <!-- Dynamic elements draw directly via JS below:
+                     - Connector rays
+                     - Semicircle Shadow Night hemisphere overlay
+                     - Earth Globe, Continent sliding paths, Korea Pin observer flag
+                     - Rotational tilted Axis line
+                     - Earth Equator 자전방향 indicator
+                -->
+                <g id="dynamic-orbit-drawing-group"></g>
+              </svg>
+            </div>
+
+            <!-- Captions footer -->
+            <div class="z-10 mt-auto bg-slate-900/90 border border-slate-800/80 p-3 rounded-xl backdrop-blur-sm flex items-center justify-between gap-3 text-xs">
+              <div>
+                <span id="label-orbit-season" class="text-amber-300 font-extrabold flex items-center gap-1">📅 공전 계절 위치: 봄 밤하늘 </span>
+              </div>
+              <div class="text-right shrink-0 hidden">
+                <span class="text-slate-400 block text-[9px] uppercase tracking-wider">자전 각도</span>
+                <span id="label-rotation-degree" class="text-emerald-400 font-mono font-bold text-sm">0°</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Korea Sky Dome Observatory (Right) -->
+          <div class="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-4 flex flex-col justify-between text-white shadow-md relative min-h-[460px] overflow-hidden">
+            <div class="z-10 flex items-center justify-between">
+              <div class="flex items-center gap-2 text-cyan-300 text-xs font-black bg-cyan-950/80 border border-cyan-800/30 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                대한민국에서 본 하늘
+              </div>
+              <div id="label-night-index" class="text-xs px-2.5 py-1 rounded-full border bg-orange-100 text-orange-600 border-orange-300 font-extrabold">☀️ 낮에 본 남쪽 하늘</div>
+            </div>
+
+            <!-- Sizable Night Floating constellation info -->
+            <div id="caption-night-constellation" class="z-10 mt-2 mx-1 bg-slate-950/80 border border-slate-800/60 p-2.5 rounded-xl text-center shadow-lg transition-all min-h-[92px]">
+              <span id="label-constellation-badge" class="text-[10px] text-indigo-400 bg-indigo-950/95 border border-indigo-800/50 px-2 py-0.5 rounded font-extrabold shadow-sm">
+                🌠 우리나라 남쪽 밤하늘 계절 대표 별자리 관측
+              </span>
+              <h4 id="label-constellation-name" class="text-sm font-black text-amber-300 mt-1 flex items-center justify-center gap-1.5"></h4>
+              <p id="label-constellation-desc" class="text-[10px] text-slate-300 mt-0.5 max-w-sm mx-auto leading-normal"></p>
+            </div>
+
+            <!-- Dome Sky Graphics: 4:3 Nested Window inside column -->
+            <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-slate-800/80 shadow-inner my-3 bg-slate-950">
+              <!-- Sky color layer -->
+              <div id="dome-sky-color" class="absolute inset-0 transition-colors duration-1000 bg-gradient-to-b from-sky-400 via-sky-200 to-amber-100"></div>
+
+              <!-- Vector celestial arc -->
+              <svg id="dome-arc-svg" class="absolute inset-0 w-full h-full" viewBox="0 0 400 300" fill="none">
+                <!-- Trajectory curves: both are always visible with distinct styles -->
+                <path id="dome-sun-trajectory" d="M 50,220 Q 200,100 350,220" stroke="#F59E0B" stroke-width="2" stroke-dasharray="3 3" opacity="0.6"/>
+                <path id="dome-star-trajectory" d="M 50,220 Q 200,100 350,220" stroke="#818CF8" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.5"/>
+
+                <!-- Direction motion arrows along the curves -->
+                <g id="dome-trajectory-arrows"></g>
+
+                <!-- Stars background in night -->
+                <g id="dome-night-passive-stars" opacity="0.75" class="hidden">
+                  <circle cx="40" cy="50" r="1" fill="#FFF" />
+                  <circle cx="120" cy="70" r="0.8" fill="#FFF" />
+                  <circle cx="280" cy="40" r="1.2" fill="#FFF" />
+                  <circle cx="340" cy="65" r="0.8" fill="#FFF" />
+                  <circle cx="180" cy="55" r="1.3" fill="#FFF" />
+                </g>
+
+                <!-- Sun node drawing -->
+                <g id="dome-sun-node"></g>
+
+                <!-- Constellation nodes drawings -->
+                <g id="dome-constellation-node"></g>
+
+                <!-- Ground under horizon (drawn after nodes to cover them below horizon line) -->
+                <rect x="0" y="220" width="400" height="80" fill="#0F172A" stroke="#1E293B" stroke-width="1" />
+
+                <text x="50" y="255" id="east-text" fill="#E2E8F0" fontSize="11" fontWeight="black" textAnchor="middle">동쪽</text>
+                <text x="200" y="260" id="south-text" fill="#F8FAFC" fontSize="13" fontWeight="black" textAnchor="middle">남쪽</text>
+                <text x="350" y="255" id="west-text" fill="#E2E8F0" fontSize="11" fontWeight="black" textAnchor="middle">서쪽</text>
+              </svg>
+
+              <!-- Horizon badge label at bottom center inside sky dome -->
+              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-slate-700/60 pointer-events-none">
+                <span class="text-[9px] text-slate-300 font-bold uppercase tracking-wider">대한민국 관측 지평선</span>
+              </div>
+            </div>
+
+            <!-- Status readout tables -->
+            <div class="z-10 mt-auto bg-slate-900/95 border border-slate-800/80 p-3 rounded-xl backdrop-blur-sm text-xs space-y-2">
+              <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] text-slate-300 font-medium pb-2 border-b border-slate-800/60 animate-fade-in">
+                <div class="border-r border-slate-800/80">
+                  <span class="text-slate-400 block text-[8.5px] uppercase">일주 움직임</span>
+                  <span id="readout-apparent-movement" class="text-cyan-300 font-bold block mt-0.5 leading-snug">동에서 서</span>
+                </div>
+                <div class="border-r border-slate-800/80">
+                  <span class="text-slate-400 block text-[8.5px] uppercase">계절 대표 별자리</span>
+                  <span id="readout-representative-stars" class="text-amber-400 font-bold block mt-0.5 leading-snug">사자자리</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[8.5px] uppercase">태양 남중고도</span>
+                  <span id="readout-sun-altitude" class="text-emerald-400 font-bold block mt-0.5 leading-snug">52°</span>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-center text-[10.5px] text-slate-300 font-medium">
+                <div class="border-r border-slate-800/80">
+                  <span class="text-slate-400 block text-[8.5px] uppercase">낮 / 밤 길이</span>
+                  <span id="readout-day-night-length" class="text-rose-400 font-extrabold block mt-0.5 leading-snug">12시간 / 12시간</span>
+                </div>
+                <div class="col-span-2">
+                  <span class="text-slate-400 block text-[8.5px] uppercase">대표 별자리 관측 가능 시간 (밤 길이 기준)</span>
+                  <span id="readout-constellation-time" class="text-yellow-300 font-extrabold block mt-0.5 leading-snug">밤 18:00 ~ 아침 06:00 (12시간)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulator Panels Bottom Controls Layout (Bento Grid) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- 1. Rotation Direction (Col span 3) -->
+          <div class="md:col-span-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+            <label class="text-xs font-black text-slate-500 uppercase tracking-wide block">🔄 1단계: 지구 자전 방향</label>
+            <div class="space-y-1.5">
+              <button
+                type="button"
+                id="btn-dir-standard"
+                onclick="setRotationDirection('west-to-east')"
+                class="w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-slate-105 text-slate-800"
+              >
+                <span>서 ➔ 동</span>
+                <span class="bg-emerald-500 w-1.5 h-1.5 rounded-full inline-block"></span>
+              </button>
+
+              <button
+                type="button"
+                id="btn-dir-reverse"
+                onclick="setRotationDirection('east-to-west')"
+                class="w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-white text-slate-500 border border-slate-100"
+              >
+                <span>동 ➔ 서</span>
+                <span class="bg-transparent w-1.5 h-1.5 rounded-full inline-block"></span>
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-400 leading-normal">지구는 북극에서 보았을 때 반시계 방향(서에서 동)으로 돌고 있답니다.</p>
+          </div>
+
+          <!-- 2. Sim States Speed Controllers (Col span 3) -->
+          <div class="md:col-span-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+            <label class="text-xs font-black text-slate-500 uppercase tracking-wide block">⚡ 2단계: 지구 자전 상태</label>
+            <div class="space-y-1.5">
+              <button
+                type="button"
+                id="btn-state-active"
+                onclick="setRotationState(true)"
+                class="w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-slate-900 text-white"
+              >
+                <span>자전 회전</span>
+                <span class="bg-emerald-500 w-1.5 h-1.5 rounded-full inline-block"></span>
+              </button>
+
+              <button
+                type="button"
+                id="btn-state-stopped"
+                onclick="setRotationState(false)"
+                class="w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-white text-slate-500 border border-slate-100"
+              >
+                <span>자전 멈춤</span>
+                <span class="bg-transparent w-1.5 h-1.5 rounded-full inline-block"></span>
+              </button>
+            </div>
+
+            <!-- Speed sliders -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-[10px] text-slate-400 font-bold">
+                <span>자전 배속</span>
+                <span id="label-sim-speed" class="text-slate-800">3x 배속</span>
+              </div>
+              <input
+                type="range"
+                id="sim-speed-slider"
+                min="0.5"
+                max="5"
+                step="0.5"
+                value="3"
+                oninput="changeRotationSpeed(this.value)"
+                class="w-full h-1 bg-slate-150 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+              />
+            </div>
+          </div>
+
+          <!-- 3. Season selectors (Col span 3) -->
+          <div class="md:col-span-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+            <label class="text-xs font-black text-slate-500 uppercase tracking-wide block">🍂 3단계: 지구 공전 계절 바꾸기</label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button id="btn-season-spring" onclick="setSelectSeason('spring')" class="py-1.5 px-2 rounded-xl text-xs font-extrabold border bg-indigo-600 text-white transition-colors cursor-pointer">봄</button>
+              <button id="btn-season-summer" onclick="setSelectSeason('summer')" class="py-1.5 px-2 rounded-xl text-xs font-extrabold border bg-white text-slate-600 border-slate-200/80 transition-colors cursor-pointer">여름</button>
+              <button id="btn-season-autumn" onclick="setSelectSeason('autumn')" class="py-1.5 px-2 rounded-xl text-xs font-extrabold border bg-white text-slate-600 border-slate-200/80 transition-colors cursor-pointer">가을</button>
+              <button id="btn-season-winter" onclick="setSelectSeason('winter')" class="py-1.5 px-2 rounded-xl text-xs font-extrabold border bg-white text-slate-600 border-slate-200/80 transition-colors cursor-pointer">겨울</button>
+            </div>
+            <p class="text-[10px] text-slate-400 leading-normal">공전할 시 남쪽 하늘에 마주 보는 계절별 대표 별자리가 자연스레 교체됩니다.</p>
+            
+            <!-- Causal chain guide highlight box -->
+            <div class="bg-indigo-50 border border-indigo-100 p-2 rounded-xl text-[9px] text-indigo-950 font-medium space-y-0.5">
+              <span class="font-extrabold text-indigo-900 block">☀️ 계절 변화 핵심 인과관계 학습</span>
+              <div class="leading-relaxed">
+                지구 자전축 비스듬 기울어짐 (약 23.5°) ➔ 대지 입사각 변화 (빛 세기) ➔ 남중고도 및 낮 길이 격차 ➔ 태양 흡수 열에너지 증감 ➔ 계절 발생!
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Axis tilt controls (Col span 3) -->
+          <div class="md:col-span-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+            <label class="text-xs font-black text-slate-500 uppercase tracking-wide block">📏 4단계: 자전축 기울기</label>
+            <div class="flex flex-col gap-1.5">
+              <button id="btn-tilt-0" onclick="setSelectTilt(0)" class="py-1.5 px-2 rounded-xl font-mono text-[10px] font-black cursor-pointer text-left bg-white text-slate-500 border border-slate-100 hover:bg-slate-200">0°</button>
+              <button id="btn-tilt-23" onclick="setSelectTilt(23.5)" class="py-1.5 px-2 rounded-xl font-mono text-[10px] font-black cursor-pointer text-left bg-slate-900 text-white">23.5°</button>
+              <button id="btn-tilt-45" onclick="setSelectTilt(45)" class="py-1.5 px-2 rounded-xl font-mono text-[10px] font-black cursor-pointer text-left bg-white text-slate-500 border border-slate-100 hover:bg-slate-200">45°</button>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between text-[10px] text-slate-400 font-bold">
+                <span>정밀 조정 축각 (약 23.5° 실제)</span>
+                <span id="label-tilt-angle-current" class="text-slate-700 font-mono font-bold">현재: 23.5°</span>
+              </div>
+              <input
+                type="range"
+                id="tilt-angle-slider"
+                min="0"
+                max="90"
+                step="0.5"
+                value="23.5"
+                oninput="changeTiltAngleSlider(this.value)"
+                class="w-full h-1 bg-slate-150 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+              />
+            </div>
+            <p class="text-[10px] text-slate-400 leading-normal">실제 지구 자전축은 약 23.5도입니다. 기울어질수록 계절별 온도와 고도 격차가 엄청납니다!</p>
+            <p class="text-[9.5px] text-red-500 font-semibold leading-normal mt-1">※ 별자리는 현재 지구에서 보이는 모습으로 표시됩니다. 자전축 기울기에 따른 별자리 위치 변화는 반영하지 않습니다.</p>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Global standard Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-5 border-t border-slate-850">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div>
+          <p class="font-bold text-slate-300">지구의 자전과 공전 입체 가상 탐험 단원 (초등학교 6학년 과학)</p>
+          <p class="text-[10px] mt-0.5">우주선 지평선 궤도 시뮬레이션 및 코치 AI 튜터 통합 시스템</p>
+        </div>
+        <p class="text-[10px] text-slate-500 font-bold">COPYRIGHT © 2026 GOOGLE AI STUDIO CHATBOT LAB. ALL RIGHTS RESERVED.</p>
+      </div>
+    </footer>
+
+    <!-- All Core JavaScript Engine Logic of index.html -->
+    <script>
+      // Star configurations for the 4 representative constellations
+      const CONSTELLATIONS_DATA = {
+        spring: {
+          name: "사자자리",
+          description: "봄을 대표하는 당당한 사자의 모습을 담은 별자리입니다.",
+          stars: [
+            { x: 30, y: 35, size: 4 },
+            { x: 45, y: 38, size: 3 },
+            { x: 55, y: 50, size: 2.5 },
+            { x: 60, y: 35, size: 3 },
+            { x: 50, y: 20, size: 2.5 },
+            { x: 38, y: 15, size: 3 },
+            { x: 26, y: 22, size: 2 },
+            { x: 24, y: 12, size: 3.5 },
+            { x: 18, y: 18, size: 2 }
+          ],
+          connections: [
+            [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], 
+            [5, 6], [6, 7], [7, 8], [8, 0], [1, 5]
+          ]
+        },
+        summer: {
+          name: "전갈자리",
+          description: "붉은 심장 안타레스를 번쩍이며 독침을 세운 남쪽 하늘의 용맹한 무법자.",
+          stars: [
+            { x: 25, y: 20, size: 2.5 },
+            { x: 32, y: 24, size: 3 },
+            { x: 30, y: 15, size: 2 },
+            { x: 40, y: 35, size: 4.5 },
+            { x: 45, y: 45, size: 3 },
+            { x: 52, y: 52, size: 2.5 },
+            { x: 62, y: 55, size: 3 },
+            { x: 72, y: 48, size: 2.5 },
+            { x: 70, y: 38, size: 3.5 }
+          ],
+          connections: [
+            [0, 1], [2, 1], [1, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8]
+          ]
+        },
+        autumn: {
+          name: "페가수스자리",
+          description: "가을 밤하늘 높은 중천에 거대한 사각형 날개를 펼치며 달리는 천마 우주선.",
+          stars: [
+            { x: 30, y: 30, size: 4 },
+            { x: 32, y: 55, size: 3.5 },
+            { x: 58, y: 52, size: 3.5 },
+            { x: 56, y: 27, size: 4 },
+            { x: 72, y: 18, size: 2.5 },
+            { x: 80, y: 25, size: 2 },
+            { x: 18, y: 65, size: 2 },
+            { x: 22, y: 72, size: 2.5 }
+          ],
+          connections: [
+            [0, 1], [1, 2], [2, 3], [3, 0],
+            [3, 4], [4, 5], [1, 6], [6, 7]
+          ]
+        },
+        winter: {
+          name: "오리온자리",
+          description: "겨울 밤하늘의 일등 영웅! 삼태성 허리띠와 찬란한 리겔을 뽐내는 사냥꾼의 전설.",
+          stars: [
+            { x: 32, y: 22, size: 4.5 },
+            { x: 62, y: 25, size: 3.5 },
+            { x: 46, y: 42, size: 3 },
+            { x: 48, y: 42, size: 3 },
+            { x: 50, y: 42, size: 3 },
+            { x: 36, y: 62, size: 3.5 },
+            { x: 60, y: 60, size: 4.5 },
+            { x: 47, y: 12, size: 2 }
+          ],
+          connections: [
+            [0, 2], [1, 4], [2, 3], [3, 4], [2, 5], [4, 6], 
+            [0, 7], [1, 7], [5, 6]
+          ]
+        }
+      };
+
+      const SEASONS = {
+        spring: {
+          korean: "봄",
+          angleRad: (3 * Math.PI) / 2,
+          sunAngle: 52,
+          description: "새싹이 돋고 기온이 마법처럼 온화해져요. 지구의 비스듬한 자전축이 태양의 앞뒤/좌우 균형에 이르는 시기예요."
+        },
+        summer: {
+          korean: "여름",
+          angleRad: Math.PI,
+          sunAngle: 75,
+          description: "낮이 엄청 길고 뜨거운 태양이 한낮에 높게 떠요! 자전축의 북극이 해를 향해 기울어져 있기 때문이죠."
+        },
+        autumn: {
+          korean: "가을",
+          angleRad: Math.PI / 2,
+          sunAngle: 52,
+          description: "오곡백과가 소복이 익는 선선한 가을바람. 밤낮의 길이가 신비롭게도 똑같아지는 균형의 계절입니다."
+        },
+        winter: {
+          korean: "겨울",
+          angleRad: 0,
+          sunAngle: 35,
+          description: "바람이 쌩쌩 불고 기온이 낮아져요. 자전축의 남반구가 태양쪽으로 기울고, 북반구인 수호성들은 태양과 멀어져 온도가 뚝 떨어집니다."
+        }
+      };
+
+      // --- State Manager System ---
+      let state = {
+        activeTab: "intro",
+        
+        userInitialExplanation: localStorage.getItem("cosmo_user_initial_explanation") || "",
+        userRevisedExplanation: localStorage.getItem("cosmo_user_revised_explanation") || "",
+        isIntroSubmitted: localStorage.getItem("cosmo_is_intro_submitted") === "true",
+        isRevisedSubmitted: localStorage.getItem("cosmo_is_revised_submitted") === "true",
+        
+        analysisResult: JSON.parse(localStorage.getItem("cosmo_analysis_result") || "null"),
+        comparedResult: JSON.parse(localStorage.getItem("cosmo_compared_result") || "null"),
+        
+        reflectionAnswers: JSON.parse(localStorage.getItem("cosmo_reflection_answers") || '{"learned":"", "changed":"", "curious":""}'),
+        isReflectionSubmitted: localStorage.getItem("cosmo_is_reflection_submitted") === "true",
+        
+        chatMessages: JSON.parse(localStorage.getItem("cosmo_chat_history") || "null"),
+
+        // Simulator Core States
+        earthAngle: 0,
+        isRotating: true,
+        rotationDir: "west-to-east", // 'west-to-east' | 'east-to-west'
+        rotationSpeed: 3, // 0.5 to 5
+        season: "spring",
+        tiltAngle: 23.5 // 0 to 90
+      };
+
+      // Default welcome prompt if chatMessages was deleted or is null
+      if (!state.chatMessages) {
+        state.chatMessages = [
+          {
+            id: "welcome-1",
+            role: "assistant",
+            content: "안녕! 지구의 비밀을 탐색하는 수수께끼 우주선에 온 것을 환영해! 나는 천문학자 '코스모' 박사란다. 우리 푸른 지구가 매일매일 어떻게 힘차게 움직이며 흥미진진한 우주 풍경을 만들어내는지 파헤쳐 보자.\n\n가장 먼저 떠오르는 궁금증부터 시작해 볼까? 하루 동안 우리가 보는 태양은 하늘에서 어떻게 움직이는 것처럼 느끼니?",
+            timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })
+          }
+        ];
+      }
+
+      // Sync state function
+      function saveState() {
+        localStorage.setItem("cosmo_user_initial_explanation", state.userInitialExplanation);
+        localStorage.setItem("cosmo_user_revised_explanation", state.userRevisedExplanation);
+        localStorage.setItem("cosmo_is_intro_submitted", String(state.isIntroSubmitted));
+        localStorage.setItem("cosmo_is_revised_submitted", String(state.isRevisedSubmitted));
+        localStorage.setItem("cosmo_analysis_result", JSON.stringify(state.analysisResult));
+        localStorage.setItem("cosmo_compared_result", JSON.stringify(state.comparedResult));
+        localStorage.setItem("cosmo_reflection_answers", JSON.stringify(state.reflectionAnswers));
+        localStorage.setItem("cosmo_is_reflection_submitted", String(state.isReflectionSubmitted));
+        localStorage.setItem("cosmo_chat_history", JSON.stringify(state.chatMessages));
+      }
+
+      // --- Setup Page ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // Render initial settings on components
+        document.getElementById("initial-explanation").value = state.userInitialExplanation;
+        document.getElementById("revised-explanation-input").value = state.userRevisedExplanation;
+        
+        document.getElementById("reflect-q1").value = state.reflectionAnswers.learned;
+        document.getElementById("reflect-q2").value = state.reflectionAnswers.changed;
+        document.getElementById("reflect-q3").value = state.reflectionAnswers.curious;
+
+        if (state.isReflectionSubmitted) {
+          document.getElementById("reflection-success-msg").classList.remove("hidden");
+        }
+
+        // Preseed previews
+        updateBeforeAfterPreviews();
+        
+        // Initial tabs setup
+        switchTab(state.activeTab);
+
+        // Render any analysis result if it exists
+        if (state.isIntroSubmitted && state.analysisResult) {
+          renderIntroAnalysisResult(state.analysisResult);
+        }
+
+        // Render compared results if exist
+        if (state.isRevisedSubmitted && state.comparedResult) {
+          renderComparedResult(state.comparedResult);
+        }
+
+        // Render messenger chat logs
+        renderChatMessages();
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Start animation frame
+        requestAnimationFrame(tickAnimation);
+      });
+
+      // Tab switcher
+      function switchTab(tabId) {
+        state.activeTab = tabId;
+        ["intro", "chat", "simulator"].forEach(tid => {
+          const content = document.getElementById(`tab-content-${tid}`);
+          const btn = document.getElementById(`tab-btn-${tid}`);
+          
+          if (tid === tabId) {
+            content.classList.remove("hidden");
+            btn.className = "flex items-center justify-center gap-4 py-4 px-6 rounded-2xl font-black text-base cursor-pointer transition-all duration-200 active:scale-95 bg-indigo-600 text-white shadow-md";
+          } else {
+            content.classList.add("hidden");
+            btn.className = "flex items-center justify-center gap-4 py-4 px-6 rounded-2xl font-black text-base cursor-pointer transition-all duration-200 active:scale-95 bg-white text-slate-700 border border-slate-200 shadow-sm hover:bg-slate-50";
+          }
+        });
+        
+        // Auto scroll helper
+        if (tabId === 'chat') {
+          setTimeout(() => {
+            const container = document.getElementById("chat-messages-container");
+            container.scrollTop = container.scrollHeight;
+          }, 80);
+        }
+      }
+
+      function updateBeforeAfterPreviews() {
+        const preview = document.getElementById("first-explanation-preview");
+        if (state.userInitialExplanation) {
+          preview.textContent = state.userInitialExplanation;
+          preview.className = "mt-0.5 text-slate-700 font-bold bg-white p-2 border border-slate-200 rounded-lg shadow-2xs";
+        } else {
+          preview.textContent = "도입 공책을 먼저 적어주세요. (Step 1)";
+          preview.className = "italic mt-0.5 text-slate-400";
+        }
+      }
+
+      // --- STEP 1: Intro Logic ---
+      function renderIntroAnalysisResult(data) {
+        document.getElementById("intro-feedback-card").classList.remove("hidden");
+        document.getElementById("misconception-label").textContent = data.label;
+        document.getElementById("misconception-ponder").textContent = data.pointToPonder;
+        document.getElementById("misconception-question").textContent = data.question;
+        document.getElementById("misconception-experiment").textContent = data.experiment;
+
+        const badge = document.getElementById("misconception-badge");
+        if (data.misconceptionDetected) {
+          badge.textContent = "오개념 감지";
+          badge.className = "bg-amber-400 text-amber-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs";
+        } else {
+          badge.textContent = "훌륭한 분석";
+          badge.className = "bg-emerald-500 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs";
+        }
+      }
+
+      async function handleIntroAnalysis(e) {
+        e.preventDefault();
+        const inputVal = document.getElementById("initial-explanation").value.trim();
+        if (!inputVal) return;
+
+        const btn = document.getElementById("intro-submit-btn");
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span>분석 및 전송 중...</span> <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>`;
+        lucide.createIcons();
+
+        try {
+          const response = await fetch("/api/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ explanation: inputVal })
+          });
+          
+          if (!response.ok) throw new Error("분석 연결 지연");
+          const data = await response.json();
+
+          state.userInitialExplanation = inputVal;
+          state.analysisResult = data;
+          state.isIntroSubmitted = true;
+          saveState();
+
+          // Preseed the Cosmo introductory coaching message too
+          const hasRealUser = state.chatMessages.some(m => m.role === 'user');
+          if (!hasRealUser) {
+            const welcomeMsg = {
+              id: `cosmo-msg-${Date.now()}`,
+              role: "assistant",
+              content: `안녕! 방금 전 '구름 vs 천체' 관찰 공책에 멋진 생각을 남겨주었더구나!\n\n너의 처음 설명: "${inputVal}"\n\n이 생각에 대해 내가 흥미로운 호기심 돋보기를 비추어줄게. ${data.pointToPonder}\n\n${data.question}\n\n얼른 아래 대화나 시뮬레이터를 조절해보지 않을래?`,
+              timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })
+            };
+            state.chatMessages = [welcomeMsg];
+            saveState();
+            renderChatMessages();
+          }
+
+          renderIntroAnalysisResult(data);
+          updateBeforeAfterPreviews();
+
+        } catch (err) {
+          console.error(err);
+          alert("우주 연구소와의 전파 수신율이 낮네요! 오프라인 자동 분석으로 대체 전송합니다.");
+          // Fallback static analysis if offline
+          const data = {
+            misconceptionDetected: true,
+            label: "하늘이 돌고 지구가 멈춰있다는 천체일주 착각",
+            pointToPonder: "지하철 여행을 떠났을 때, 기차가 전진할수록 바깥 창밖의 들판 가로수들이 거꾸로 쏜살같이 뒤로 미끄러지는 마법을 본 적 있죠? 기지 지평선에 서 있는 우리가 지구 자전축이라는 회전목마에 올라타서 거칠게 돌고 있어서 하늘 자체가 도는 것처럼 보이는 거랍니다.",
+            question: "지구가 지적 설계된 시계바늘처럼 서쪽에서 동쪽으로 반시계 방향 자전을 하게 되면, 그 위에 앉은 우리 눈앞의 우주는 어떻게 비쳐 흘러갈까요?",
+            experiment: "Tab 3 시뮬레이터 탭으로 넘어가서 지구 자전방향을 '서→동'과 '동→서'로 번갈아 누르고 고도와 이동 궤도의 반전 효과를 직접 체험해 봐요!"
+          };
+          state.userInitialExplanation = inputVal;
+          state.analysisResult = data;
+          state.isIntroSubmitted = true;
+          saveState();
+          renderIntroAnalysisResult(data);
+          updateBeforeAfterPreviews();
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+          lucide.createIcons();
+        }
+      }
+
+      // --- STEP 2: Chat Logic ---
+      function renderChatMessages() {
+        const container = document.getElementById("chat-messages-container");
+        container.innerHTML = "";
+
+        state.chatMessages.forEach(msg => {
+          const isMe = msg.role === "user";
+          const item = document.createElement("div");
+          item.className = `flex items-start gap-2.5 max-w-[85%] ${isMe ? "ml-auto flex-row-reverse" : ""}`;
+          
+          item.innerHTML = `
+            <div class="w-8 h-8 rounded-full ${isMe ? "bg-amber-500" : "bg-indigo-600"} text-white flex items-center justify-center shrink-0 shadow-2xs font-bold text-xs">
+              ${isMe ? "대원" : "코"}
+            </div>
+            <div class="space-y-1">
+              <div class="p-3.5 rounded-2xl text-xs leading-relaxed ${isMe ? "bg-slate-900 text-white rounded-tr-none shadow-xs" : "bg-white text-slate-800 border border-slate-200 rounded-tl-none shadow-2xs"}" style="white-space: pre-wrap;">${msg.content}</div>
+              <span class="text-[9px] text-slate-400 block ${isMe ? "text-right" : ""}">${msg.timestamp}</span>
+            </div>
+          `;
+          container.appendChild(item);
+        });
+
+        // Autoscroll
+        container.scrollTop = container.scrollHeight;
+      }
+
+      async function handleSendChatMessage(e) {
+        e.preventDefault();
+        const inputField = document.getElementById("chat-input-field");
+        const val = inputField.value.trim();
+        if (!val) return;
+
+        inputField.value = "";
+        
+        const userMsg = {
+          id: `m-user-${Date.now()}`,
+          role: "user",
+          content: val,
+          timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })
+        };
+
+        state.chatMessages.push(userMsg);
+        renderChatMessages();
+        saveState();
+
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              messages: state.chatMessages,
+              initialExplanation: state.userInitialExplanation
+            })
+          });
+
+          if (!response.ok) throw new Error("대화 서버 수신 지연");
+          const data = await response.json();
+
+          const asstMsg = {
+            id: `m-asst-${Date.now()}`,
+            role: "assistant",
+            content: data.text,
+            timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })
+          };
+
+          state.chatMessages.push(asstMsg);
+          renderChatMessages();
+          saveState();
+
+        } catch (err) {
+          console.error(err);
+          // offline mock answers
+          let reply = "우주의 전리층 간섭으로 통신 링크가 막힌 모양이구나! 하지만 코스모 박사는 다 정리해서 말해줄 수 있지. 지구가 '서쪽에서 동쪽'으로 서서히 돌기 때문에 대열을 맞춘 전 지상 위의 별자리들이 하루 밤중에 거센 파도처럼 동쪽에서 떠올라 서쪽으로 진단다. 시뮬레이터 3단계를 조작해 보면 별자리들이 동➔서로 고운 아치를 그리며 이동하는 비법을 볼 수 있어!";
+          
+          const lower = val.toLowerCase();
+          if (lower.includes("멈추") || lower.includes("중단") || lower.includes("회전스톱")) {
+            reply = "지구의 자전모터가 장난스레 완전 멈춤(Pause)으로 작동하면, 그 위 대한민국의 밤 지평선에서 해와 별들은 지구가 돌아주지 않아 공중에 얼어붙은 화석처럼 꼼짝도 하지 않고 밤낮도 교체되지 않고 머물게 돼요!";
+          } else if (lower.includes("거리") || lower.includes("계절") && lower.includes("가까")) {
+            reply = "오, 아주 영특하게 파고드는구나! 거리가 가깝고 먼 것과는 하등 상관없이 지구가 23.5도 정도 비스듬한 상태로 남중고도가 가파르냐 완만한 지표면 입사각을 쬐어 주느냐에 따라 머금는 햇빛 열에너지 양이 결정되어 겨울과 여름 사계절 기온차로 승화하는 거란다.";
+          }
+
+          const asstMsg = {
+            id: `m-asst-${Date.now()}`,
+            role: "assistant",
+            content: reply,
+            timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })
+          };
+          state.chatMessages.push(asstMsg);
+          renderChatMessages();
+          saveState();
+        }
+      }
+
+      function sendShortcut(text) {
+        document.getElementById("chat-input-field").value = text;
+      }
+
+      // --- STEP 2: Compare before/after Growth ---
+      function renderComparedResult(data) {
+        const card = document.getElementById("comparison-result-card");
+        card.classList.remove("hidden");
+        document.getElementById("comparison-progress").textContent = data.progress;
+        document.getElementById("comparison-comment").textContent = data.comment;
+      }
+
+      async function handleCompareReview(e) {
+        e.preventDefault();
+        const revisedVal = document.getElementById("revised-explanation-input").value.trim();
+        if (!revisedVal) return;
+
+        const btn = document.getElementById("compare-submit-btn");
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.textContent = "성장 분석 평가 중...";
+
+        try {
+          const response = await fetch("/api/compare", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              first: state.userInitialExplanation,
+              second: revisedVal
+            })
+          });
+
+          if (!response.ok) throw new Error("비교 분석 오류");
+          const data = await response.json();
+
+          state.userRevisedExplanation = revisedVal;
+          state.comparedResult = data;
+          state.isRevisedSubmitted = true;
+          saveState();
+
+          renderComparedResult(data);
+
+        } catch (err) {
+          console.error(err);
+          const data = {
+            progress: "처음의 태양이 직접 질주하여 낮밤과 일주를 유발한다는 일상적인 감각 착각을 깔끔하게 털어내고, 지구가 '우주 축을 중심으로 서에서 동으로 스스로 자전'한다는 객관적 구도를 아주 훌륭한 수준으로 규명하였습니다! 지식이 폭발적으로 성장했습니다.",
+            comment: "우리 기특한 요원 친구의 관찰 성찰력에 박수를 아끼지 않겠어요! 자전축 기울기에 의한 계절 일주와 별들의 일주 개념을 완벽한 인과관계로 승화시켰습니다. 아주 뛰어난 지적 탐험가입니다! 🪐"
+          };
+          state.userRevisedExplanation = revisedVal;
+          state.comparedResult = data;
+          state.isRevisedSubmitted = true;
+          saveState();
+          renderComparedResult(data);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }
+
+      // --- STEP 2: Reflection notebook submit ---
+      function handleReflectionForm(e) {
+        e.preventDefault();
+        const q1 = document.getElementById("reflect-q1").value.trim();
+        const q2 = document.getElementById("reflect-q2").value.trim();
+        const q3 = document.getElementById("reflect-q3").value.trim();
+
+        state.reflectionAnswers = { learned: q1, changed: q2, curious: q3 };
+        state.isReflectionSubmitted = true;
+        saveState();
+
+        document.getElementById("reflection-success-msg").classList.remove("hidden");
+        alert("오늘의 탐험 지혜 성찰 기록장이 천문 연구 자료로 기증 완료되었습니다! 멋져요!");
+      }
+
+      // --- GLOBAL RESET ---
+      function handleGlobalReset() {
+        if (confirm("모든 학업 탐구 흐름 기록과 채팅 대화 내역을 초기화하고 처음부터 다시 도전하시겠습니까?")) {
+          localStorage.clear();
+          state = {
+            activeTab: "intro",
+            userInitialExplanation: "",
+            userRevisedExplanation: "",
+            isIntroSubmitted: false,
+            isRevisedSubmitted: false,
+            analysisResult: null,
+            comparedResult: null,
+            reflectionAnswers: { learned: "", changed: "", curious: "" },
+            isReflectionSubmitted: false,
+            chatMessages: [
+              {
+                id: "welcome-1",
+                role: "assistant",
+                content: "안녕! 지구의 비밀을 탐색하는 수수께끼 우주선에 온 것을 환영해! 나는 천문학자 '코스모' 박사란다. 우리 푸른 지구가 매일매일 어떻게 힘차게 움직이며 흥미진진한 우주 풍경을 만들어내는지 파헤쳐 보자.\n\n가장 먼저 떠오르는 궁금증부터 시작해 볼까? 하루 동안 우리가 보는 태양은 하늘에서 어떻게 움직이는 것처럼 느끼니?",
+                timestamp: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })
+              }
+            ],
+            earthAngle: 0,
+            isRotating: true,
+            rotationDir: "west-to-east",
+            rotationSpeed: 3,
+            season: "spring",
+            tiltAngle: 23.5
+          };
+          
+          saveState();
+          
+          // reset UI fields
+          document.getElementById("initial-explanation").value = "";
+          document.getElementById("revised-explanation-input").value = "";
+          document.getElementById("reflect-q1").value = "";
+          document.getElementById("reflect-q2").value = "";
+          document.getElementById("reflect-q3").value = "";
+
+          document.getElementById("intro-feedback-card").classList.add("hidden");
+          document.getElementById("comparison-result-card").classList.add("hidden");
+          document.getElementById("reflection-success-msg").classList.add("hidden");
+
+          updateBeforeAfterPreviews();
+          renderChatMessages();
+          resetSimulatorToDefault();
+          switchTab("intro");
+        }
+      }
+
+      // --- STEP 3: Simulator Core Calculations & Visualizers ---
+      function resetSimulatorToDefault() {
+        state.rotationDir = "west-to-east";
+        state.isRotating = true;
+        state.rotationSpeed = 3;
+        state.season = "spring";
+        state.tiltAngle = 23.5;
+        state.earthAngle = 0;
+        
+        // update UI ranges/sliders/buttons
+        syncSimulatorUIPanels();
+      }
+
+      function syncSimulatorUIPanels() {
+        // 1. Rotation direction buttons states
+        const mapStandard = document.getElementById("btn-dir-standard");
+        const mapReverse = document.getElementById("btn-dir-reverse");
+        if (state.rotationDir === "west-to-east") {
+          mapStandard.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-slate-900 text-white";
+          mapReverse.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-white text-slate-500 border border-slate-100";
+          mapStandard.querySelector("span:last-child").className = "bg-emerald-500 w-1.5 h-1.5 rounded-full inline-block";
+          mapReverse.querySelector("span:last-child").className = "bg-transparent w-1.5 h-1.5 rounded-full inline-block";
+        } else {
+          mapStandard.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-white text-slate-500 border border-slate-100";
+          mapReverse.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-slate-900 text-white";
+          mapStandard.querySelector("span:last-child").className = "bg-transparent w-1.5 h-1.5 rounded-full inline-block";
+          mapReverse.querySelector("span:last-child").className = "bg-rose-500 w-1.5 h-1.5 rounded-full inline-block";
+        }
+
+        // 2. Play pause button states
+        const btnStateActive = document.getElementById("btn-state-active");
+        const btnStateStopped = document.getElementById("btn-state-stopped");
+        if (state.isRotating) {
+          btnStateActive.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-slate-900 text-white";
+          btnStateStopped.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-white text-slate-500 border border-slate-100";
+          btnStateActive.querySelector("span:last-child").className = "bg-emerald-500 w-1.5 h-1.5 rounded-full inline-block";
+          btnStateStopped.querySelector("span:last-child").className = "bg-transparent w-1.5 h-1.5 rounded-full inline-block";
+        } else {
+          btnStateActive.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-white text-slate-500 border border-slate-100";
+          btnStateStopped.className = "w-full text-left py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-between transition-colors bg-slate-900 text-white";
+          btnStateActive.querySelector("span:last-child").className = "bg-transparent w-1.5 h-1.5 rounded-full inline-block";
+          btnStateStopped.querySelector("span:last-child").className = "bg-rose-500 w-1.5 h-1.5 rounded-full inline-block";
+        }
+
+        // Speed readout
+        document.getElementById("sim-speed-slider").value = state.rotationSpeed;
+        document.getElementById("label-sim-speed").textContent = `${state.rotationSpeed}x 배속`;
+
+        // 3. Season selectors buttons states
+        ["spring", "summer", "autumn", "winter"].forEach(sKey => {
+          const sBtn = document.getElementById(`btn-season-${sKey}`);
+          if (state.season === sKey) {
+            sBtn.className = "py-1.5 px-2 rounded-xl text-xs font-extrabold border bg-indigo-600 text-white transition-colors cursor-pointer text-center";
+          } else {
+            sBtn.className = "py-1.5 px-2 rounded-xl text-xs font-extrabold border bg-white text-slate-650 border-slate-200 transition-colors cursor-pointer text-center hover:bg-slate-100";
+          }
+        });
+
+        // 4. Axis Tilt buttons states
+        const angles = [0, 23.5, 45];
+        const buttons = ["btn-tilt-0", "btn-tilt-23", "btn-tilt-45"];
+        angles.forEach((deg, idx) => {
+          const btn = document.getElementById(buttons[idx]);
+          if (state.tiltAngle === deg) {
+            btn.className = "py-1.5 px-2 rounded-xl font-mono text-[10px] font-black cursor-pointer text-left bg-slate-900 text-white";
+          } else {
+            btn.className = "py-1.5 px-2 rounded-xl font-mono text-[10px] font-black cursor-pointer text-left bg-white text-slate-500 border border-slate-100 hover:bg-slate-200";
+          }
+        });
+
+        // Slider
+        document.getElementById("tilt-angle-slider").value = state.tiltAngle;
+        document.getElementById("label-tilt-angle-current").textContent = `현재: ${state.tiltAngle}°`;
+      }
+
+      function setRotationDirection(dir) {
+        state.rotationDir = dir;
+        syncSimulatorUIPanels();
+      }
+
+      function setRotationState(isRot) {
+        state.isRotating = isRot;
+        syncSimulatorUIPanels();
+      }
+
+      function togglePlaySimulation() {
+        state.isRotating = !state.isRotating;
+        syncSimulatorUIPanels();
+      }
+
+      function changeRotationSpeed(val) {
+        state.rotationSpeed = parseFloat(val);
+        document.getElementById("label-sim-speed").textContent = `${state.rotationSpeed}x 배속`;
+      }
+
+      function setSelectSeason(sKey) {
+        state.season = sKey;
+        // Optional quick trigger
+        const captionSeason = document.getElementById("label-orbit-season");
+        captionSeason.textContent = `📅 공전 계절 위치: ${SEASONS[sKey].korean} 밤하늘`;
+        syncSimulatorUIPanels();
+      }
+
+      function setSelectTilt(deg) {
+        state.tiltAngle = deg;
+        syncSimulatorUIPanels();
+      }
+
+      function changeTiltAngleSlider(val) {
+        state.tiltAngle = parseFloat(val);
+        document.getElementById("label-tilt-angle-current").textContent = `현재: ${state.tiltAngle}°`;
+        syncSimulatorUIPanels();
+      }
+
+      // --- Animation Tick and Drawings ---
+      let lastTime = 0;
+      function tickAnimation(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        const delta = (timestamp - lastTime) / 1000;
+        lastTime = timestamp;
+
+        // 1. Static Intro Clouds and Celestial animations translation
+        animateIntroDayAndNight(delta);
+
+        // 2. Main Simulator Rotation Physics
+        if (state.isRotating) {
+          const directionSign = state.rotationDir === "west-to-east" ? 1 : -1;
+          state.earthAngle = (state.earthAngle + directionSign * state.rotationSpeed * 8 * delta) % 360;
+          if (state.earthAngle < 0) state.earthAngle += 360;
+        }
+
+        // 3. Render and Synchronize Vector Sim Graphics
+        render3DOrbitGraphics();
+
+        requestAnimationFrame(tickAnimation);
+      }
+
+      // Many dynamic stars in intro nighttime celestial background (fully dispersed, rigid rotation)
+      const introStarsData = [];
+      const INTRO_STARS_COUNT = 110;
+      for (let i = 0; i < INTRO_STARS_COUNT; i++) {
+        introStarsData.push({
+          xOffset: Math.random() * 100,
+          y: 15 + Math.random() * 115, // Dispersed fully from top to bottom to completely fill the night sky screen
+          size: 0.9 + Math.random() * 1.9,
+          opacity: 0.35 + Math.random() * 0.65
+        });
+      }
+
+      // Clouds translator in Tab 1 intro
+      let cloudX1 = 80, cloudX2 = 50, cloudOffset = 0;
+      let isIntroStarsRendered = false;
+      function animateIntroDayAndNight(delta) {
+        if (state.activeTab === "intro") {
+          // Slow translations
+          cloudX1 -= 4 * delta;
+          cloudX2 -= 8 * delta;
+          if (cloudX1 < -30) cloudX1 = 110;
+          if (cloudX2 < -30) cloudX2 = 110;
+
+          // Render clouds markup inside container
+          const cloudsContainer = document.getElementById("intro-clouds-container");
+          cloudsContainer.innerHTML = `
+            <div class="absolute bg-white/90 rounded-full filter blur-[1px] shadow-sm transform -translate-x-1/2 -translate-y-1/2" style="left: ${cloudX1}%; top: 55%; width: 90px; height: 45px; opacity: 0.85;">
+              <div class="absolute w-2/3 h-2/3 -top-1/3 left-1/4 bg-white rounded-full"></div>
+            </div>
+            <div class="absolute bg-white/80 rounded-full filter blur-[1px] shadow-sm transform -translate-x-1/2 -translate-y-1/2" style="left: ${cloudX2}%; top: 75%; width: 120px; height: 60px; opacity: 0.75;">
+              <div class="absolute w-2/3 h-2/3 -top-1/3 left-1/4 bg-white rounded-full"></div>
+            </div>
+          `;
+
+          // Celestial track speed offsets 
+          cloudOffset = (cloudOffset + 6 * delta) % 100;
+
+          // Align Sun
+          const sunX = (15 + cloudOffset) % 100;
+          const sunY = 55 + Math.sin((sunX / 100) * Math.PI) * -40; // beautiful arc projection
+          document.getElementById("dynamic-sun").style.left = `${sunX}%`;
+          document.getElementById("dynamic-sun").style.top = `${sunY}%`;
+
+          // Align Moon
+          const moonX = (30 + cloudOffset) % 100;
+          const moonY = 55 + Math.sin((moonX / 100) * Math.PI) * -40;
+          document.getElementById("dynamic-moon").style.left = `${moonX}%`;
+          document.getElementById("dynamic-moon").style.top = `${moonY}%`;
+
+          // Align and Render stars inside intro-stars-container
+          const starsContainer = document.getElementById("intro-stars-container");
+          if (starsContainer) {
+            starsContainer.className = "absolute inset-0 pointer-events-none";
+            starsContainer.style.transform = "";
+            
+            let starsHTML = "";
+            introStarsData.forEach(star => {
+              // Same horizontal translation speed for all stars (no individual speed multipliers)
+              const starX = (star.xOffset + cloudOffset) % 100;
+              // Parabolic motion parallel to the moon's path, peaking at 50% width
+              const starY = star.y - 15 + Math.sin((starX / 100) * Math.PI) * -30;
+              
+              // Twinkling effect
+              const twinkle = 0.82 + 0.18 * Math.sin(cloudOffset * 0.45 + star.xOffset);
+              starsHTML += `
+                <div class="absolute rounded-full bg-white animate-fade-in" 
+                     style="left: ${starX}%; top: ${starY}%; width: ${star.size}px; height: ${star.size}px; opacity: ${star.opacity * twinkle}; box-shadow: 0 0 ${star.size * 1.2}px rgba(255, 255, 255, 0.65);">
+                </div>
+              `;
+            });
+            starsContainer.innerHTML = starsHTML;
+          }
+        }
+      }
+
+      // --- The core Mathematical 3D Orbit and Sky Dome Renderer ---
+      function render3DOrbitGraphics() {
+        const sInfo = SEASONS[state.season];
+        
+        // 1. Earth's position inside relative ellipse space representation
+        const earthX = 200 + 125 * Math.cos(sInfo.angleRad);
+        const earthY = 150 + 62.5 * Math.sin(sInfo.angleRad);
+
+        // 2. Axis Tilt DX/DY offsets
+        const tiltRad = (state.tiltAngle * Math.PI) / 180;
+        const axisLength = 35;
+        const axisDX = axisLength * Math.sin(tiltRad);
+        const axisDY = axisLength * Math.cos(tiltRad);
+
+        // 3. Korea Observer Spot flag properties
+        const y_lat = -8;
+        const r_lat = Math.sqrt(20 * 20 - y_lat * y_lat); // radius boundary ~18
+        const rad = (state.earthAngle * Math.PI) / 180;
+
+        const px = r_lat * Math.sin(rad);
+        const py = y_lat;
+        const rz = r_lat * Math.cos(rad);
+
+        const isFrontSide = rz >= 0;
+
+        // Apply 2D Matrix rotation matching axis tilt
+        const rx = px * Math.cos(tiltRad) - py * Math.sin(tiltRad);
+        const ry = px * Math.sin(tiltRad) + py * Math.cos(tiltRad);
+
+        const observerX = earthX + rx;
+        const observerY = earthY + ry;
+
+        // 4. Dot products determining Night vs Day
+        const sun3dX = 200 - earthX;
+        const sun3dY = 0;
+        const sun3dZ = 2 * (150 - earthY);
+        const dotProduct = rx * sun3dX + rz * sun3dZ;
+        const isNight = dotProduct < 0;
+
+        // 5. Apparent local celestial culmination ratios (dayRatio & starRatio)
+        const sunUntiltedX = sun3dX * Math.cos(tiltRad) + sun3dY * Math.sin(tiltRad);
+        const sunUntiltedY = -sun3dX * Math.sin(tiltRad) + sun3dY * Math.cos(tiltRad);
+        const sunUntiltedZ = sun3dZ;
+
+        const A_coeff = r_lat * sunUntiltedX;
+        const B_coeff = r_lat * sunUntiltedZ;
+        const C_coeff = y_lat * sunUntiltedY;
+
+        const noonRad = Math.atan2(A_coeff, B_coeff);
+        let diffRad = rad - noonRad;
+        diffRad = Math.atan2(Math.sin(diffRad), Math.cos(diffRad));
+
+        const amplitude = Math.sqrt(A_coeff * A_coeff + B_coeff * B_coeff);
+        let halfDayWidthRad = Math.PI / 2;
+        if (amplitude > 0.001) {
+          const cosVal = -C_coeff / amplitude;
+          halfDayWidthRad = Math.acos(Math.max(-0.99, Math.min(0.99, cosVal)));
+        }
+
+        const isStandard = state.rotationDir === "west-to-east";
+        
+        // Single unified formula where increasing/decreasing is naturally driven by earthAngle movement
+        let dayRatio = (diffRad + halfDayWidthRad) / (2 * halfDayWidthRad);
+
+        const nightDuration = 2 * Math.PI - 2 * halfDayWidthRad;
+        let t = diffRad;
+        if (t < halfDayWidthRad) t += 2 * Math.PI;
+        let starRatio = (t - halfDayWidthRad) / nightDuration;
+
+        // Keep a clamped version specifically for text readouts/caps
+        const clampedDayRatio = Math.max(0, Math.min(1, dayRatio));
+        const clampedStarRatio = Math.max(0, Math.min(1, starRatio));
+
+        // 6. Culmination altitude values
+        // Dynamic factors depending on season and selected axis tilt angle
+        const sunTiltFactor = (state.season === "summer" ? 1.0 : state.season === "winter" ? -1.0 : (state.season === "spring" ? 0.25 : -0.25));
+        const starTiltFactor = -sunTiltFactor;
+
+        const effectiveSunAngle = 52.5 + sunTiltFactor * state.tiltAngle;
+        const effectiveStarAngle = 52.5 + starTiltFactor * 23.5;
+
+        const peakHeight = 220 - effectiveSunAngle * 1.6;
+        const starPeakHeight = 220 - effectiveStarAngle * 1.6;
+
+        const activeConstellation = CONSTELLATIONS_DATA[state.season];
+
+        // Apparent movements text outputs
+        let apparentSunText = "";
+        if (!state.isRotating) {
+          apparentSunText = "정지";
+        } else {
+          apparentSunText = isStandard
+            ? "동쪽에서 서쪽으로 이동"
+            : "서쪽에서 동쪽으로 이동";
+        }
+
+        // Update readouts values on Dome observatory footer
+        document.getElementById("readout-apparent-movement").textContent = apparentSunText;
+        document.getElementById("readout-representative-stars").textContent = activeConstellation.name;
+        document.getElementById("readout-sun-altitude").textContent = `${Math.round(effectiveSunAngle)}°`;
+
+        // Calculate Day and Night Duration based on physical orbital projection angles
+        const dayFraction = halfDayWidthRad / Math.PI;
+        const nightFraction = 1.0 - dayFraction;
+        const rawDayHours = dayFraction * 24;
+        const rawNightHours = 24 - rawDayHours;
+
+        function formatHoursToKorean(hoursTotal) {
+          const h = Math.floor(hoursTotal);
+          const m = Math.round((hoursTotal - h) * 60);
+          if (m === 0) return `${h}시간`;
+          return `${h}시간 ${m}분`;
+        }
+
+        const dayLengthText = formatHoursToKorean(rawDayHours);
+        const nightLengthText = formatHoursToKorean(rawNightHours);
+        document.getElementById("readout-day-night-length").textContent = `${dayLengthText} / ${nightLengthText}`;
+
+        // Calculate Constellation Observable hours (sunset is rawNightHours/2 before midnight, sunrise is after)
+        const sunsetHour = (24.0 - rawNightHours / 2.0) % 24.0;
+        const sunriseHour = (rawNightHours / 2.0) % 24.0;
+
+        function formatHourTime(hDec) {
+          const h = Math.floor(hDec);
+          const m = Math.round((hDec - h) * 60);
+          return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        const sunsetStr = formatHourTime(sunsetHour);
+        const sunriseStr = formatHourTime(sunriseHour);
+        document.getElementById("readout-constellation-time").textContent = `밤 ${sunsetStr} ~ 아침 ${sunriseStr} (${formatHoursToKorean(rawNightHours)})`;
+
+        // Update rotating degree tag in Orbit footer
+        document.getElementById("label-rotation-degree").textContent = `${Math.floor(state.earthAngle)}°`;
+
+        // --- Render Space Orbit Panel (Left View) ---
+        const svgGroup = document.getElementById("dynamic-orbit-drawing-group");
+        
+        // Build Sliding continent contours blocks strings mapping
+        const slidingOffset1 = ((state.earthAngle % 360) / 360) * 40;
+        const slidingOffset2 = (((state.earthAngle + 180) % 360) / 360) * 40;
+
+        // Shadow hemisphere semicircle logic path
+        let shadowOverlayPathMarkup = "";
+        if (state.season === "autumn") {
+          shadowOverlayPathMarkup = `<circle cx="${earthX}" cy="${earthY}" r="20" fill="#020617" opacity="0.9" />`;
+        } else if (state.season !== "spring") {
+          const angleToSun = Math.atan2(150 - earthY, 200 - earthX);
+          shadowOverlayPathMarkup = `
+            <path
+              d="M ${earthX + 20 * Math.sin(angleToSun)} ${earthY - 20 * Math.cos(angleToSun)} 
+                 A 20 20 0 0 0 ${earthX - 20 * Math.sin(angleToSun)} ${earthY + 20 * Math.cos(angleToSun)} 
+                 Z"
+              fill="#020617"
+              opacity="0.9"
+            />
+          `;
+        }
+
+        // Compass arrow Equator 자전방향 rotation line
+        const arrowY = earthY + 24;
+        const rotationDirectionArrowPoint = isStandard 
+          ? `<polygon points="${earthX + 20},${arrowY-2} ${earthX + 15},${arrowY+3} ${earthX + 15},${arrowY-5}" fill="#34D399" />`
+          : `<polygon points="${earthX - 20},${arrowY-2} ${earthX - 15},${arrowY+3} ${earthX - 15},${arrowY-5}" fill="#34D399" />`;
+
+        // Draw the 4 representative constellations in orbit view at their directions opposite to the sun
+        let constellationsOrbitMarkup = "";
+        const configOrbit = {
+          spring: { x: 200, y: 30, scale: 0.55 },
+          summer: { x: 45, y: 150, scale: 0.55 },
+          autumn: { x: 200, y: 270, scale: 0.55 },
+          winter: { x: 355, y: 150, scale: 0.55 }
+        };
+
+        for (const key of ['spring', 'summer', 'autumn', 'winter']) {
+          const isActive = (state.season === key);
+          const cData = CONSTELLATIONS_DATA[key];
+          const cConf = configOrbit[key];
+          
+          // Draw connections
+          let linesStr = "";
+          cData.connections.forEach(([p1, p2]) => {
+            const s1 = cData.stars[p1];
+            const s2 = cData.stars[p2];
+            const x1 = cConf.x + (s1.x - 50) * cConf.scale;
+            const y1 = cConf.y + (s1.y - 40) * cConf.scale;
+            const x2 = cConf.x + (s2.x - 50) * cConf.scale;
+            const y2 = cConf.y + (s2.y - 40) * cConf.scale;
+            linesStr += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${isActive ? '#FBBF24' : '#334155'}" stroke-width="${isActive ? 1.0 : 0.6}" stroke-dasharray="${isActive ? '' : '1.5 1.5'}" />`;
+          });
+
+          // Draw stars
+          let starsStr = "";
+          cData.stars.forEach((star) => {
+            const sx = cConf.x + (star.x - 50) * cConf.scale;
+            const sy = cConf.y + (star.y - 40) * cConf.scale;
+            starsStr += `<circle cx="${sx}" cy="${sy}" r="${star.size * 0.3 * cConf.scale + (isActive ? 1.0 : 0.5)}" fill="${isActive ? '#FFF' : '#475569'}" />`;
+            if (isActive) {
+              starsStr += `<circle cx="${sx}" cy="${sy}" r="${star.size * 0.6 * cConf.scale + 1.2}" fill="rgba(251, 191, 36, 0.3)" class="animate-pulse" />`;
+            }
+          });
+
+          constellationsOrbitMarkup += `
+            <g opacity="${isActive ? 1.0 : 0.45}">
+              ${linesStr}
+              ${starsStr}
+            </g>
+          `;
+        }
+
+        svgGroup.innerHTML = `
+          <!-- Connection ray sun to earth -->
+          <line x1="200" y1="150" x2="${earthX}" y2="${earthY}" stroke="#EF4444" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.7" />
+
+          <!-- Background Seasonal Constellations in Orbit directions -->
+          ${constellationsOrbitMarkup}
+
+          <!-- Blue Earth Globe -->
+          <circle cx="${earthX}" cy="${earthY}" r="20" fill="#2563EB" stroke="#3B82F6" stroke-width="1" />
+
+          <!-- Continent path contour blocks (clipped carefully to Earth sphere) -->
+          <g clip-path="url(#earth-contour-clip)">
+            <clipPath id="earth-contour-clip">
+              <circle cx="${earthX}" cy="${earthY}" r="20" />
+            </clipPath>
+            <g stroke="#34D399" fill="#10B981" fill-opacity="0.4" stroke-width="1" stroke-linecap="round">
+              <path d="M ${earthX - 25 + slidingOffset1} ${earthY - 10} C ${earthX - 15 + slidingOffset1} ${earthY - 15}, ${earthX - 5 + slidingOffset1} ${earthY + 5}, ${earthX - 20 + slidingOffset1} ${earthY + 12}" />
+              <path d="M ${earthX - 15 + slidingOffset1} ${earthY + 5} Q ${earthX - 5 + slidingOffset1} ${earthY + 15} ${earthX + 5 + slidingOffset1} ${earthY + 8}" />
+              <path d="M ${earthX - 25 + slidingOffset2} ${earthY - 18} C ${earthX - 12 + slidingOffset2} ${earthY - 10}, ${earthX - 18 + slidingOffset2} ${earthY + 10}, ${earthX - 15 + slidingOffset2} ${earthY + 15}" />
+            </g>
+          </g>
+
+          <!-- Shadow semi-circle for Night -->
+          ${shadowOverlayPathMarkup}
+
+          <!-- Axis Line with tilt -->
+          <line 
+            x1="${earthX + axisDX}" 
+            y1="${earthY - axisDY}" 
+            x2="${earthX - axisDX}" 
+            y2="${earthY + axisDY}" 
+            stroke="#EEF2F6" 
+            stroke-width="2.5" 
+            stroke-linecap="round" 
+          />
+          <text x="${earthX + axisDX + 4}" y="${earthY - axisDY - 4}" fill="#EEF2F6" fontSize="7" fontWeight="bold">북극</text>
+          <text x="${earthX - axisDX - 6}" y="${earthY + axisDY + 11}" fill="#94A3B8" fontSize="5.5" fontWeight="bold" textAnchor="middle">남극</text>
+
+          <!-- Korea Observer Pin -->
+          ${isFrontSide ? `
+            <g>
+              <circle cx="${observerX}" cy="${observerY}" r="3.5" fill="#EF4444" stroke="#fff" stroke-width="0.5" />
+              <text x="${observerX + 5}" y="${observerY - 3}" fill="#EF4444" fontSize="7" fontWeight="black">대한민국</text>
+            </g>
+          ` : `
+            <g opacity="0.35">
+              <circle cx="${observerX}" cy="${observerY}" r="2.5" fill="none" stroke="#EF4444" stroke-width="1" stroke-dasharray="1.5 1" />
+              <text x="${observerX + 5}" y="${observerY - 3}" fill="#94A3B8" fontSize="5.5" fontWeight="bold">대한민국</text>
+            </g>
+          `}
+
+          <!-- Equator Equator lines -->
+          <g>
+            <path d="M ${earthX - 18} ${arrowY} Q ${earthX} ${arrowY + 4} ${earthX + 18} ${arrowY}" stroke="#34D399" stroke-width="2" fill="none" stroke-dasharray="3 3" />
+            ${rotationDirectionArrowPoint}
+          </g>
+        `;
+
+        // --- Render Sky Dome Observatory Panel (Right View) ---
+        const domeSkyColor = document.getElementById("dome-sky-color");
+        const domeNightStars = document.getElementById("dome-night-passive-stars");
+        const sunTrajectoryCurve = document.getElementById("dome-sun-trajectory");
+        const starTrajectoryCurve = document.getElementById("dome-star-trajectory");
+
+        // Calculate positions for both Sun and active season Constellation (unclamped so they can set below the horizon)
+        // Reverse direction if standard is false (meaning rotation dir is east-to-west)
+        const sunX = isStandard ? (50 + dayRatio * 300) : (50 + (1 - dayRatio) * 300);
+        const sunY = 220 - Math.sin(dayRatio * Math.PI) * (210 - peakHeight);
+
+        const starX = isStandard ? (50 + starRatio * 300) : (50 + (1 - starRatio) * 300);
+        const starY = 220 - Math.sin(starRatio * Math.PI) * (220 - starPeakHeight);
+
+        // Update direction motion arrows along the curves (V-shaped arrowheads removed as requested)
+        const arrowGroup = document.getElementById("dome-trajectory-arrows");
+        arrowGroup.innerHTML = "";
+
+        // Render Constellation structure markup (Representative seasonal constellation)
+        let linesMarkup = "";
+        activeConstellation.connections.forEach(([p1, p2], i) => {
+          const s1 = activeConstellation.stars[p1];
+          const s2 = activeConstellation.stars[p2];
+          const x1 = starX + (s1.x - 50) * 0.75;
+          const y1 = starY + (s1.y - 40) * 0.75;
+          const x2 = starX + (s2.x - 50) * 0.75;
+          const y2 = starY + (s2.y - 40) * 0.75;
+          const strokeColor = isNight ? "rgba(165, 180, 252, 0.85)" : "rgba(165, 180, 252, 0.25)";
+          linesMarkup += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${strokeColor}" stroke-width="1.3" stroke-dasharray="${i % 3 === 0 ? "" : "2 1"}"/>`;
+        });
+
+        let nodesMarkup = "";
+        activeConstellation.stars.forEach((star) => {
+          const sx = starX + (star.x - 50) * 0.75;
+          const sy = starY + (star.y - 40) * 0.75;
+          const starOpacity = isNight ? "1" : "0.2";
+          nodesMarkup += `
+            <g opacity="${starOpacity}">
+              <circle cx="${sx}" cy="${sy}" r="${star.size * 0.45 + 0.3}" fill="#FFFFFF" />
+              <circle cx="${sx}" cy="${sy}" r="${star.size * 0.9}" fill="rgba(99, 102, 241, 0.4)" class="animate-pulse" />
+            </g>
+          `;
+        });
+
+        // Add Constellation text labels with styled opacity
+        const constellationOpacity = isNight ? "1" : "0.25";
+        const themeColor = isNight ? "#FBBF24" : "rgba(249, 115, 22, 0.4)";
+        const subThemeColor = isNight ? "#818CF8" : "rgba(99, 102, 241, 0.35)";
+        document.getElementById("dome-constellation-node").innerHTML = `
+          <g opacity="${constellationOpacity}">
+            <circle cx="${starX}" cy="${starY}" r="45" fill="rgba(129, 140, 248, 0.05)" />
+            ${linesMarkup}
+            ${nodesMarkup}
+            <text x="${starX}" y="${starY - 32}" fill="${themeColor}" fontSize="10.5" fontWeight="black" textAnchor="middle" style="text-shadow: 0 1px 3px rgba(0,0,0,${isNight ? "0.9" : "0.2"})">
+              ✧ ${activeConstellation.name} ✧
+            </text>
+            <text x="${starX}" y="${starY + 45}" fill="${subThemeColor}" fontSize="8" fontWeight="bold" textAnchor="middle">
+              (${isNight ? "한밤" : "낮/보이지않음"} ${Math.floor(clampedStarRatio * 12 + 18) % 24}시 경)
+            </text>
+          </g>
+        `;
+
+        // Render Sun structure markup (Moon is removed as requested)
+        const sunOpacity = isNight ? "0.15" : "1";
+        document.getElementById("dome-sun-node").innerHTML = `
+          <!-- Sun representation -->
+          <g opacity="${sunOpacity}">
+            <circle cx="${sunX}" cy="${sunY}" r="25" fill="rgba(251, 191, 36, 0.2)" />
+            <circle cx="${sunX}" cy="${sunY}" r="14" fill="#FBBF24" />
+            <circle cx="${sunX}" cy="${sunY}" r="10" fill="#FFFBEB" />
+            <text x="${sunX}" y="${sunY - 20}" fill="${isNight ? "#F97316" : "#EA580C"}" fontSize="10" fontWeight="extrabold" textAnchor="middle">
+              태양 (${isNight ? "낮의 반대편 위치" : "남쪽 하늘"} ${Math.floor(clampedDayRatio * 12 + 6)}시 경)
+            </text>
+          </g>
+        `;
+
+        if (isNight) {
+          // Night Dome
+          domeSkyColor.className = "absolute inset-0 transition-colors duration-1000 bg-slate-950";
+          domeNightStars.classList.remove("hidden");
+          domeNightStars.setAttribute("opacity", "0.75");
+          sunTrajectoryCurve.setAttribute("opacity", "0.15");
+          starTrajectoryCurve.setAttribute("opacity", "0.7");
+
+          // Keep active caption perfectly sized and customized for Night
+          document.getElementById("caption-night-constellation").className = "z-10 mt-2 mx-1 bg-slate-950/80 border border-indigo-500/30 p-2.5 rounded-xl text-center shadow-lg transition-all min-h-[92px]";
+          document.getElementById("label-constellation-badge").className = "text-[10px] text-indigo-400 bg-indigo-950/95 border border-indigo-800/50 px-2 py-0.5 rounded font-extrabold shadow-sm";
+          document.getElementById("label-constellation-badge").textContent = "🌠 우리나라 남쪽 밤하늘 계절 대표 별자리 관측";
+          document.getElementById("label-constellation-name").innerHTML = `
+            <i class="w-4 h-4 text-amber-300 animate-pulse inline" data-lucide="sparkles"></i>
+            밤하늘 대표 별자리: ${activeConstellation.name}
+          `;
+          document.getElementById("label-constellation-desc").textContent = activeConstellation.description;
+
+          // Adjust direction texts for great night accessibility
+          document.getElementById("east-text").setAttribute("fill", "#38BDF8");
+          document.getElementById("south-text").setAttribute("fill", "#67E8F9");
+          document.getElementById("west-text").setAttribute("fill", "#38BDF8");
+
+          // Show Night indicator title
+          const labelIndex = document.getElementById("label-night-index");
+          labelIndex.className = "text-xs px-2.5 py-1 rounded-full border bg-indigo-950/80 text-indigo-300 border-indigo-700/30 font-extrabold";
+          labelIndex.textContent = "🌙 밤에 본 남쪽 하늘";
+
+        } else {
+          // Day Dome
+          domeSkyColor.className = "absolute inset-0 transition-colors duration-1000 bg-gradient-to-b from-sky-400 via-sky-200 to-amber-100";
+          
+          // Faint cosmic backdrop even during day
+          domeNightStars.classList.remove("hidden");
+          domeNightStars.setAttribute("opacity", "0.08");
+          
+          sunTrajectoryCurve.setAttribute("opacity", "0.7");
+          starTrajectoryCurve.setAttribute("opacity", "0.15");
+
+          const dayConstellations = {
+            spring: CONSTELLATIONS_DATA.autumn, // 봄철 낮 (태양방향): 페가수스자리
+            summer: CONSTELLATIONS_DATA.winter, // 여름철 낮 (태양방향): 오리온자리
+            autumn: CONSTELLATIONS_DATA.spring, // 가을철 낮 (태양방향): 사자자리
+            winter: CONSTELLATIONS_DATA.summer  // 겨울철 낮 (태양방향): 전갈자리
+          };
+          const dayConstellation = dayConstellations[state.season];
+
+          // Keep active caption perfectly sized and customized for Day so height does not bounce/resize
+          document.getElementById("caption-night-constellation").className = "z-10 mt-2 mx-1 bg-slate-950/80 border border-slate-800/100 p-2.5 rounded-xl text-center shadow-lg transition-all min-h-[92px]";
+          document.getElementById("label-constellation-badge").className = "text-[10px] text-orange-400 bg-orange-950/95 border border-orange-800/50 px-2 py-0.5 rounded font-extrabold shadow-sm";
+          document.getElementById("label-constellation-badge").textContent = "☀️ 태양빛으로 가려진 낮의 우주 공간";
+          document.getElementById("label-constellation-name").innerHTML = `
+            <i class="w-4 h-4 text-orange-400 inline" data-lucide="sun"></i>
+            태양 쪽에 있는 별자리 (낮의 우주 방향): ${dayConstellation.name}
+          `;
+          document.getElementById("label-constellation-desc").textContent = `낮에는 우리 머리 위 태양이 있는 하늘 방향에 ${dayConstellation.name}가 위치해 있습니다. 하지만 눈부신 태양빛이 대기에 닿아 산란 작용을 일으켜 파랗고 밝은 하늘을 만들기 때문에, 태양과 같은 공간에 있는 ${dayConstellation.name}의 아름다운 별빛은 가려져 보이지 않게 됩니다.`;
+
+          // Adjust direction texts for day visibility
+          document.getElementById("east-text").setAttribute("fill", "#F8FAFC");
+          document.getElementById("south-text").setAttribute("fill", "#FFFFFF");
+          document.getElementById("west-text").setAttribute("fill", "#F8FAFC");
+
+          // Show Day indicator title
+          const labelIndex = document.getElementById("label-night-index");
+          labelIndex.className = "text-xs px-2.5 py-1 rounded-full border bg-orange-950/80 text-orange-400 border-orange-700/40 font-extrabold";
+          labelIndex.textContent = "☀️ 낮에 본 남쪽 하늘";
+        }
+        
+        // Dynamic path definitions (control points mathematically aligned to perfect culmination elevations)
+        const sunCtrlY = 2 * peakHeight - 200;
+        const starCtrlY = 2 * starPeakHeight - 220;
+        sunTrajectoryCurve.setAttribute("d", `M 50,220 Q 200,${sunCtrlY} 350,220`);
+        starTrajectoryCurve.setAttribute("d", `M 50,220 Q 200,${starCtrlY} 350,220`);
+
+        lucide.createIcons();
+      }
+    </script>
+  </body>
+</html>
